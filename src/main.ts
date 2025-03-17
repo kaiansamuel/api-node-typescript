@@ -16,15 +16,22 @@ app.get('/filmes', (req, res) => {
 
 app.get('/filmes/:id', (req, res) => {
   const { id } = req.params
+  const { ignorar } = req.query
+  const camposParaIgnorar = ignorar ? ignorar.toString().split(',') : []
+
   const filme = filmes.find((f: any) => f.id === id)
 
   if(!filme){
     res.status(404).send('Filme não encontrado!')
     return
   }
-  res.json(filme)
+
+  const copia = {...filme}
+  camposParaIgnorar.forEach((campo: string) => {delete copia[campo]})
+
+  res.json(copia)
 })
 
-app.listen(4000, () => {
+app.listen(porta, () => {
   console.log(`Server runing at port ${porta}!`)
 })
