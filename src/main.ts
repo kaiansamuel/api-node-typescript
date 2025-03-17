@@ -11,7 +11,18 @@ app.get("/", (req, res) => {
 })
 
 app.get('/filmes', (req, res) => {
-  res.json(filmes)
+  res.status(200).json(filmes)
+})
+
+app.get('/filmes/:id', (req, res) => {
+  const { id } = req.params
+  const filme = filmes.find((f: any) => f.id === id)
+
+  if(!filme){
+    res.status(404).send('Filme não encontrado!')
+    return
+  }
+  res.json(filme)
 })
 
 app.listen(4000, () => {
